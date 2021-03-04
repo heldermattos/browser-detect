@@ -22,7 +22,6 @@ class ServiceProvider extends BaseServiceProvider
      */
     public function boot(): void
     {
-        $this->registerDirectives();
 
         $source = realpath($raw = __DIR__ . '/../config/browser-detect.php') ?: $raw;
 
@@ -33,40 +32,6 @@ class ServiceProvider extends BaseServiceProvider
         }
 
         $this->mergeConfigFrom($source, 'browser-detect');
-    }
-
-    /**
-     * Register the blade directives.
-     */
-    protected function registerDirectives(): void
-    {
-        Blade::if(
-            'desktop',
-            function () {
-                return app()->make('browser-detect')->detect()->isDesktop();
-            }
-        );
-
-        Blade::if(
-            'tablet',
-            function () {
-                return app()->make('browser-detect')->detect()->isTablet();
-            }
-        );
-
-        Blade::if(
-            'mobile',
-            function () {
-                return app()->make('browser-detect')->detect()->isMobile();
-            }
-        );
-
-        Blade::if(
-            'browser',
-            function ($fn) {
-                return app()->make('browser-detect')->detect()->$fn();
-            }
-        );
     }
 
     /**
